@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080411"><title>Pxster — Account access</title><link rel="icon" href="assets/pxster-logo.png"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="theme.css"><script src="config.js" defer></script><script src="app.js" defer></script></head>
+<body>
+  <div id="workspace" hidden>
+  <aside class="sidebar">
+    <a class="brand" href="#composer" aria-label="Pxster home"><span class="logo-crop"><img src="assets/pxster-short.png" alt=""></span><span>PXSTER<span class="brand-dot">.</span></span></a>
+    <div class="workspace-label">YOUR WORKSPACE</div>
+    <nav aria-label="Workspace"><a href="#composer" data-view="composer"><span>＋</span>Composer</a><a href="#accounts" data-view="accounts"><span>◎</span>Connected accounts</a><a href="#history" data-view="history"><span>◷</span>Publishing history</a></nav>
+    <div class="sidebar-note"><span class="tiny-star">✦</span><strong>Your content.</strong><p>Your frequency.</p></div>
+    <div class="profile"><span class="avatar">P</span><div><strong id="profile-name">Your workspace</strong><small id="profile-email">Sign in to get started</small></div><button id="logout" class="icon-button" title="Sign out" aria-label="Sign out" hidden>↗</button></div>
+  </aside>
+  <main>
+    <header class="topbar"><span id="breadcrumb">Workspace <span>/</span> Composer</span><span id="connection-status" class="connection">Connecting to API…</span></header>
+    <div id="demo-banner" class="notice" hidden>Demo workspace · Publishing is simulated. Nothing is sent to your social accounts.</div>
+    <section id="composer" class="view">
+      <div class="page-heading"><div class="eyebrow">YOUR NEXT TRANSMISSION</div><h1>One idea. Every channel.</h1><p>Create your post, choose where it goes, and make it happen.</p></div>
+      <form id="composer-form" class="composer-grid">
+        <div class="editor-stack">
+          <section class="card"><div class="card-title"><span class="step">01</span><h2>Add your media</h2><span class="subtle">One image or video</span></div>
+            <label class="upload-zone" id="drop-zone" tabindex="0" role="button" aria-label="Choose media to upload"><input id="media-input" type="file" accept="image/jpeg,image/png,image/webp,video/mp4" hidden><span class="upload-icon">↥</span><strong>Drop your next great post here</strong><span>or <u>browse files</u></span><small>JPG, PNG, WebP or MP4 · up to 64 MiB</small></label>
+            <div id="media-info" class="media-info" hidden><div><strong id="media-name"></strong><small id="media-meta"></small></div><button type="button" id="remove-media" class="text-button">Remove</button></div>
+            <p class="field-note">Photos publish to Facebook. Use an H.264 MP4, 3 seconds–10 minutes, for video channels.</p>
+          </section>
+          <section class="card"><div class="card-title"><span class="step">02</span><h2>Write your caption</h2></div><label for="caption" class="sr-only">Caption</label><textarea id="caption" maxlength="5000" rows="5" placeholder="Start with a thought. Tell your story. Give it a little personality…"></textarea><div class="caption-footer"><span>Your words, your way.</span><span id="character-count">0 / 5,000</span></div></section>
+          <section class="card"><div class="card-title"><span class="step">03</span><h2>Choose your channels</h2><a href="#accounts" class="text-link">Manage accounts ↗</a></div><div id="channel-list" class="channel-list"><p class="empty-text">Connect an account to start publishing.</p></div>
+            <fieldset id="youtube-options" hidden><legend>YouTube settings</legend><label>Video title<input id="youtube-title" maxlength="100" placeholder="Give your video a title"></label><div class="field-row"><label>Visibility<select id="youtube-privacy"><option value="">Select visibility</option><option value="private">Private</option><option value="unlisted">Unlisted</option><option value="public">Public</option></select></label><label>Audience<select id="youtube-kids"><option value="">Select audience</option><option value="no">Not made for kids</option><option value="yes">Made for kids</option></select></label></div></fieldset>
+            <fieldset id="tiktok-options" hidden><legend>TikTok settings</legend><p id="tiktok-creator" class="field-note"></p><label>Who can watch?<select id="tiktok-privacy"><option value="">Select visibility</option></select></label><div class="checks"><label><input type="checkbox" id="allow-comment">Allow comments</label><label><input type="checkbox" id="allow-duet">Allow Duet</label><label><input type="checkbox" id="allow-stitch">Allow Stitch</label></div><label class="check-label"><input id="commercial" type="checkbox">This content promotes a brand, product or service</label><div id="commercial-options" hidden><label class="check-label"><input id="own-brand" type="checkbox">Your brand · labeled “Promotional content”</label><label class="check-label"><input id="paid-brand" type="checkbox">Branded content · labeled “Paid partnership”</label><p class="field-note">Paid partnerships cannot use private visibility.</p></div><label class="check-label consent"><input id="tiktok-consent" type="checkbox"><span>By posting, you agree to TikTok’s <a href="https://www.tiktok.com/legal/page/global/music-usage-confirmation/en" target="_blank" rel="noreferrer">Music Usage Confirmation</a><span id="brand-policy" hidden> and <a href="https://www.tiktok.com/legal/page/global/bc-policy/en" target="_blank" rel="noreferrer">Branded Content Policy</a></span>.</span></label><p class="field-note">TikTok may take a few minutes to process your post before it appears.</p></fieldset>
+          </section>
+          <section class="card"><div class="card-title"><span class="step">04</span><h2>Make it happen</h2></div><div class="timing-options"><label><input name="timing" type="radio" value="now" checked><span><strong>Publish now</strong><small>Send it when you’re ready</small></span></label><label><input name="timing" type="radio" value="later"><span><strong>Schedule for later</strong><small>Find the right moment</small></span></label></div><label id="schedule-field" hidden>Date & time<input id="schedule-at" type="datetime-local"><small id="timezone-note"></small></label><div id="form-error" class="form-error" role="alert" hidden></div><div class="publish-row"><span id="selection-summary">Select accounts to continue</span><button id="publish-button" class="primary" type="submit">Publish post <span>↗</span></button></div></section>
+        </div>
+        <aside class="preview-column"><div class="preview-title"><h2>Signal preview</h2><span>PREVIEW</span></div><div class="preview-card"><div class="preview-account"><span class="avatar">P</span><div><strong>Your next post</strong><small id="preview-account-name">Choose a connected account</small></div><span>•••</span></div><div id="preview-media" class="preview-media"><div class="preview-placeholder"><span>✦</span><h3>Good things<br>are coming.</h3><p>Your media will appear here.</p></div></div><div class="preview-bottom"><div class="preview-actions">♡ <span>◯</span> ↗ <span class="bookmark">▱</span></div><p id="preview-caption">A blank canvas for your next idea.</p><small>Preview is illustrative. Each platform may crop or format your post differently.</small></div></div><div class="tip"><span>✧</span><div><strong>One post, a little more reach.</strong><p>Choose several accounts to share the same idea across your channels.</p></div></div></aside>
+      </form>
+    </section>
+    <section id="accounts" class="view" hidden><div class="page-heading"><div class="eyebrow">BRING YOUR CHANNELS TOGETHER</div><h1>Your corner of the internet.</h1><p>Connect Facebook Pages, TikTok accounts, and YouTube channels.</p></div><div id="provider-cards" class="provider-cards"></div><section class="card"><div class="card-title"><h2>Connected accounts</h2></div><div id="account-list"></div></section></section>
+    <section id="history" class="view" hidden><div class="page-heading heading-row"><div><div class="eyebrow">EVERY POST, ONE PLACE</div><h1>See how it’s going.</h1><p>Track schedules, platform results, and every publishing attempt.</p></div><button class="secondary" id="refresh-history">Refresh ↻</button></div><div class="history-toolbar"><label class="sr-only" for="history-filter">Filter posts</label><select id="history-filter"><option value="all">All posts</option><option value="scheduled">Scheduled</option><option value="published">Published</option><option value="attention">Needs attention</option></select><span class="subtle">Updates every 10 seconds</span></div><div id="history-list"></div><button id="load-more" class="secondary" hidden>Load older posts</button></section>
+    <footer>Made for your creative rhythm. <span>PXSTER WORKSPACE</span></footer>
+  </main>
+  </div>
+  <div class="auth-background" aria-hidden="true"><div></div></div>
+  <dialog id="auth-dialog" aria-labelledby="auth-title">
+  <a id="auth-home" class="brand" href="http://localhost:5174" aria-label="Back to Pxster landing page"><span class="logo-crop"><img src="assets/pxster-short.png" alt=""></span><span>PXSTER<span class="brand-dot">.</span></span><small>← BACK TO HOME</small></a>
+    <div class="auth-shell">
+      <aside class="auth-art" aria-label="Pxster"><span class="auth-kicker">PX / CREATOR ACCESS</span><img src="assets/pxster-logo.png" alt="Pxster neon PX logo"><div class="auth-art-copy"><h2>YOUR NEXT<br>ERA STARTS<br><em>HERE.</em></h2><p>One workspace.<br>Every creative frequency.</p></div><div class="auth-art-footer">FACEBOOK &nbsp; / &nbsp; TIKTOK &nbsp; / &nbsp; YOUTUBE</div></aside>
+      <form id="auth-form">
+        <div class="auth-tabs" role="group" aria-label="Account access"><button type="button" id="auth-login-tab" class="active" aria-pressed="true">Log in</button><button type="button" id="register-button" aria-pressed="false" hidden>Sign up</button></div>
+        <div class="auth-eyebrow">WELCOME TO YOUR CONTROL ROOM</div>
+        <h2 id="auth-title">Welcome back.</h2><p id="auth-description">Your next great post is waiting.</p>
+        <label id="login-identifier-label">Username or email<input id="email" type="text" autocomplete="username" maxlength="254" placeholder="Enter your username or email" required></label>
+        <label id="signup-username-label" hidden>Username<input id="signup-username" type="text" autocomplete="username" minlength="3" maxlength="32" pattern="[A-Za-z0-9][A-Za-z0-9_.\-]*" placeholder="Choose your creator name" disabled><small>3–32 letters, numbers, dots, underscores or hyphens.</small></label>
+        <label id="signup-email-label" hidden>Email<input id="signup-email" type="email" autocomplete="email" maxlength="254" placeholder="you@example.com" disabled></label>
+        <label>Password<span class="password-field"><input id="password" aria-label="Password" type="password" minlength="12" maxlength="256" autocomplete="current-password" placeholder="At least 12 characters" required><button type="button" id="toggle-password" aria-label="Show password">Show</button></span></label>
+        <label id="confirm-password-label" hidden>Confirm password<input id="confirm-password" type="password" minlength="12" maxlength="256" autocomplete="new-password" placeholder="Enter your password again" disabled></label>
+        <p id="auth-error" class="form-error" role="alert" hidden></p>
+        <button class="primary" id="login-button" type="submit">Log in <span>↗</span></button>
+        <p class="auth-switch"><span id="auth-switch-copy">New to Pxster?</span> <button type="button" id="auth-switch-button">Create an account</button></p>
+        <p id="auth-status" class="field-note" role="status">Your workspace opens only after you log in.</p>
+      </form>
+    </div>
+  </dialog>
+  <div id="toast" role="status" aria-live="polite" hidden></div>
+</body></html>

@@ -1,0 +1,8 @@
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob: https://api.pxster.xyz; media-src 'self' blob: https://api.pxster.xyz; connect-src 'self' https://api.pxster.xyz; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
+/config.js
+  Cache-Control: no-cache

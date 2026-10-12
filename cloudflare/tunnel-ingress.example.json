@@ -1,0 +1,8 @@
+{
+  "config": {
+    "ingress": [
+      { "hostname": "api.pxster.xyz", "service": "http://api:8000" },
+      { "service": "http_status:404" }
+    ]
+  }
+}

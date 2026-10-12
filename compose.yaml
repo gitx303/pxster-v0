@@ -1,0 +1,54 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: pxster
+      POSTGRES_USER: pxster
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pxster -d pxster"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+  migrate:
+    build: ./backend
+    env_file: ${PXSTER_ENV_FILE:-.env}
+    command: ["alembic", "-c", "alembic.ini", "upgrade", "head"]
+    depends_on:
+      db:
+        condition: service_healthy
+  api:
+    build: ./backend
+    env_file: ${PXSTER_ENV_FILE:-.env}
+    expose: ["8000"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+  worker:
+    build: ./backend
+    env_file: ${PXSTER_ENV_FILE:-.env}
+    command: ["python", "-m", "pxster.worker"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    command: ["tunnel", "--no-autoupdate", "run"]
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN:?Set TUNNEL_TOKEN in .env}
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+volumes:
+  postgres:
