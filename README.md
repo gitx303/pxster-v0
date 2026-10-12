@@ -58,3 +58,9 @@ Provider processing is tracked by polling; webhook receivers are deliberately no
 The original supplied PNG is copied unchanged to both frontends under `public/assets/pxster-logo.png`; CSS controls its presentation. Production Sign up follows `ALLOW_REGISTRATION` (enabled in `.env.example`). Preview credentials are created only in the local database and are not embedded in the frontend, source, or distribution ZIP. The username migration preserves existing email-only accounts.
 
 Policy routes `/privacy`, `/terms`, and `/data-deletion` are supplied as drafts pending operator/contact details and review. See the deployment guide before publishing.
+
+## Upcoming security features
+
+Approval, notification, passkey, audit, receipt, and reporting namespaces are reserved but disabled. See [namespace ownership and activation rules](docs/feature-namespaces.md). Authenticated placeholders return 501; the current publishing worker does not yet require approval.
+
+Try the interactive notification design at `http://localhost:5174/notification-preview.html` after starting the local demo. It uses sample data only and never sends notifications or approves/publishes posts. In Workers Static Assets the clean URL is `/notification-preview`.
