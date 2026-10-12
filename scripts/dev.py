@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 os.chdir(ROOT)
 (ROOT / "data").mkdir(exist_ok=True)
 env = os.environ.copy()
-env.update(ENVIRONMENT="development", DEMO_MODE="true", ALLOW_REGISTRATION="true", STORAGE_DRIVER="local", DATABASE_URL="sqlite:///./data/pxster.db", APP_ORIGIN="http://localhost:5173", API_URL="http://localhost:8017", PYTHONPATH=str(ROOT / "backend"))
+env.update(ENVIRONMENT="development", DEMO_MODE="true", ALLOW_REGISTRATION="true", STORAGE_DRIVER="local", DATABASE_URL="sqlite:///./data/pxster.db", APP_ORIGIN="http://localhost:5173", API_URL="http://localhost:8017", MEDIA_URL="", PYTHONPATH=str(ROOT / "backend"))
 for prefix in ["FACEBOOK", "TIKTOK", "GOOGLE"]:
     env.pop(f"{prefix}_CLIENT_ID", None)
     env.pop(f"{prefix}_CLIENT_SECRET", None)

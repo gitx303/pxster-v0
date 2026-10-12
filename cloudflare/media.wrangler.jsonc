@@ -1,0 +1,16 @@
+{
+  "name": "pxster-media-delivery",
+  "main": "media-worker.mjs",
+  "compatibility_date": "2026-10-12",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [
+    {
+      "pattern": "media.pxster.xyz",
+      "custom_domain": true
+    }
+  ],
+  "observability": {
+    "enabled": false
+  }
+}
