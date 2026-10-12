@@ -16,6 +16,7 @@ from .config import settings
 from .models import ConnectedAccount, LoginSession, MediaAsset, OAuthState, Post, PostDestination, PublishAttempt, Session, User, as_utc, now, uid
 from .security import digest, encrypt_tokens, passwords
 from . import providers, storage
+from .features.router import capabilities, install_reserved_routes
 
 
 @asynccontextmanager
@@ -143,7 +144,7 @@ def health(db=Depends(database)):
 
 @app.get("/config")
 def config():
-    return {"demo": settings.demo, "registration": settings.registration, "platforms": {p: providers.configured(p) for p in providers.PLATFORMS}, "max_upload_bytes": settings.max_upload}
+    return {"features": capabilities(), "demo": settings.demo, "registration": settings.registration, "platforms": {p: providers.configured(p) for p in providers.PLATFORMS}, "max_upload_bytes": settings.max_upload}
 
 
 @app.post("/auth/register", status_code=201)
@@ -399,3 +400,7 @@ def retry(destination_id: str, user=Depends(current_user), db=Depends(database))
     post.state = "publishing"
     db.commit()
     return {"ok": True}
+
+
+# Install last so reservations cannot silently shadow existing API routes.
+install_reserved_routes(app, current_user)

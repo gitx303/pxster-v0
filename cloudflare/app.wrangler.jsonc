@@ -1,5 +1,17 @@
 {
   "name": "pxster-app",
-  "pages_build_output_dir": "../app/public",
-  "compatibility_date": "2026-10-12"
+  "compatibility_date": "2026-10-12",
+  "workers_dev": false,
+  "preview_urls": false,
+  "assets": {
+    "directory": "../app/public",
+    "html_handling": "drop-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "routes": [
+    {
+      "pattern": "app.pxster.xyz",
+      "custom_domain": true
+    }
+  ]
 }

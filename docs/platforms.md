@@ -19,7 +19,7 @@ References: [Pages posts](https://developers.facebook.com/docs/pages-api/posts/)
 - `TIKTOK_CLIENT_ID` is the TikTok **client key**; also set `TIKTOK_CLIENT_SECRET`.
 - Callback: `https://api.pxster.xyz/oauth/tiktok/callback`.
 - Scopes: `user.info.basic`, `video.publish`.
-- Verify ownership of `api.pxster.xyz` using TikTok's DNS TXT verification under the app's URL properties. This verifies the media-delivery path without adding a public verification-file route. The exact TXT value is account-specific and must come from your TikTok console.
+- Verify ownership of `media.pxster.xyz` using TikTok's DNS TXT verification under the app's URL properties. This verifies the media-delivery path without adding a public verification-file route. The exact TXT value is account-specific and must come from your TikTok console.
 - The composer loads creator info, requires a manually selected allowed privacy value, starts interaction checkboxes unchecked, handles disabled interactions, and captures commercial-content disclosure and consent. The API rechecks current creator limits before posting.
 - Video publishing uses `PULL_FROM_URL`, since media has already been uploaded to Pxster/R2. The worker polls `publish/status/fetch` until TikTok reports completion.
 - TikTok video validation additionally enforces 360–4096 pixels on both axes and 23–60 FPS, plus the creator's current duration limit.
@@ -42,3 +42,7 @@ References: [Web server OAuth](https://developers.google.com/identity/protocols/
 ## Webhooks
 
 Publishing status polling is implemented; no webhook routes currently accept platform events. Add signature validation, replay protection, and idempotent event storage before enabling webhook delivery. The stable `api.pxster.xyz` hostname can host those routes later without changing the frontends.
+
+## Public identity and policy URLs
+
+Use `https://pxster.xyz` as the website, `https://pxster.xyz/privacy` as privacy URL, `https://pxster.xyz/terms` as terms URL, and `https://pxster.xyz/data-deletion` where human-readable deletion instructions are accepted. Finalize draft policies and monitored contact details before submission. The deletion page is not an automated Meta signed-request callback.

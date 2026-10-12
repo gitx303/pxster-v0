@@ -23,10 +23,10 @@ async function api(path, options = {}) {
 }
 function selectedAccounts() { return [...document.querySelectorAll('.channel input:checked')].map(input => state.accounts.find(a => a.id === input.value)).filter(Boolean); }
 function navigate() {
-  const view = ['accounts', 'history'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'composer';
+  const view = ['accounts', 'history', 'settings', 'publishing-approval'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'composer';
   document.querySelectorAll('.view').forEach(el => el.hidden = el.id !== view);
-  document.querySelectorAll('nav a').forEach(el => { el.classList.toggle('active', el.dataset.view === view); if (el.dataset.view === view) el.setAttribute('aria-current', 'page'); else el.removeAttribute('aria-current'); });
-  $('breadcrumb').textContent = 'Workspace / ' + { composer: 'Composer', accounts: 'Connected accounts', history: 'Publishing history' }[view];
+  document.querySelectorAll('nav a[data-view]').forEach(el => { el.classList.toggle('active', el.dataset.view === view); if (el.dataset.view === view) el.setAttribute('aria-current', 'page'); else el.removeAttribute('aria-current'); });
+  $('breadcrumb').textContent = 'Workspace / ' + { composer: 'Composer', accounts: 'Connected accounts', history: 'Publishing history', settings: 'Settings / General Settings', 'publishing-approval': 'Settings / Publishing Approval' }[view];
   if (view === 'history' && state.user) loadHistory().catch(e => toast(e.message));
 }
 window.addEventListener('hashchange', navigate);
