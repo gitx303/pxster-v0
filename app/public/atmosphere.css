@@ -1,0 +1,57 @@
+/* Atmospheric Neon · Light. Decorative colors are separate from accessible actions. */
+:root{color-scheme:light;--paper:#E7EDF1;--surface:#F1F5F7;--card:#F7FAFB;--line:#D5E0E6;--ink:#1C2733;--muted:#4A5B6B;--green:#00677E;--accent:#00677E;--white:#F7FAFB;--cyan:#00677E;--pink:#9C005F;--danger:#A72E20;--decorative-cyan:#46C7DD;--decorative-pink:#FF5BBE;--decorative-lavender:#B59AE8;--shadow:rgba(28,39,51,.10);background:var(--paper);color:var(--ink)}
+:root[data-parallax="true"]{--paper:#D6DFE6}
+body{background:var(--paper);color:var(--ink);isolation:isolate}
+body::before{content:"";position:fixed;inset:-6%;pointer-events:none;z-index:-1;background:radial-gradient(ellipse at 5% 20%,rgba(70,199,221,.08),transparent 55%),radial-gradient(ellipse at 95% 80%,rgba(255,91,190,.04),transparent 55%),radial-gradient(ellipse at 65% 12%,rgba(181,154,232,.05),transparent 60%);animation:light-haze 38s ease-in-out infinite alternate}
+@keyframes light-haze{from{transform:translate(-1%,-1%)}to{transform:translate(1%,1.5%) scale(1.03)}}
+.sidebar,.topbar{background:var(--surface);border-color:var(--line)}
+.card,.provider-card,.preview-card{background:var(--card);border-color:var(--line);box-shadow:0 8px 24px var(--shadow)}
+.brand,.page-heading h1,.card-title h2,.preview-title h2,.auth-art-copy h2,#auth-title,.preview-account,.preview-bottom,.provider-card h2{color:var(--ink)}
+.brand-dot{color:var(--decorative-pink)}
+.logo-crop img,.brand .logo-crop img{mix-blend-mode:normal}
+nav a,.page-heading p,.provider-card p,.field-note,.subtle,.empty-text,.workspace-label,.sidebar-note,.sidebar-note p,.sidebar-note strong,.profile small,.connection,.topbar,.caption-footer,.channel span small,.checks label,.check-label,.timing-options small,.publish-row>span,.preview-bottom small,.tip,.tip p,.preview-title,.icon-button,details,footer,.auth-art-copy p,.auth-kicker,.auth-art-footer,#auth-description,#auth-home small,.auth-shell label,.auth-shell label>small,.auth-shell #auth-status{color:var(--muted)}
+nav a:hover{background:#E4EDF2;color:#00576B}nav a.active{background:#D8F1F5;color:#00576B;box-shadow:inset 2px 0 #00677E}
+.primary,.auth-shell #login-button{background:#00677E;border-color:#00677E;color:#FFFFFF;box-shadow:0 4px 14px var(--shadow)}
+.primary:hover{background:#00576B;color:#FFFFFF;box-shadow:0 6px 18px var(--shadow)}
+.text-button,.text-link,#auth-switch-button{color:#00677E}
+.secondary{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.secondary:hover{background:#D8F1F5;color:#00576B}
+.channel,.timing-options label,.upload-zone,.preview-media,.preview-placeholder,.avatar{background:var(--surface);border-color:var(--line);color:var(--ink)}
+.channel:has(input:checked),.timing-options label:has(input:checked),.upload-zone:hover,.upload-zone.dragover{background:#D8F1F5;border-color:#00677E;color:#00576B}
+.upload-zone>span:not(.upload-icon),.upload-zone small,.preview-placeholder p{color:var(--muted)}
+.upload-icon,.step{background:#D8F1F5;color:#00576B;border-color:var(--line)}
+input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea,.auth-shell input:not([type=checkbox]),.settings-grid textarea{background:var(--card);border-color:var(--line);color:var(--ink)}
+input::placeholder,textarea::placeholder{color:var(--muted)}
+input[type=checkbox],input[type=radio]{accent-color:#00677E}
+:focus-visible{outline-color:#00576B!important}
+.caption-footer,.publish-row,.profile,.destination,.auth-tabs,fieldset,.settings-subnav{border-color:var(--line)}
+.media-info,.settings-summary{background:#D8F1F5;color:#00576B;border-color:var(--line)}
+.media-info small{color:#00576B}
+.badge{background:#D8F1F5;color:#00576B}.badge.failed,.badge.partial_failure,.badge.needs_attention,.form-error{background:#FBE8E4;color:#A72E20}
+.provider-card .channel-actions .remove-account-button{color:#A04416}.provider-card .channel-actions .remove-account-button:hover{color:#80320E}
+#channel-notice{background:var(--surface);color:var(--muted);border-color:var(--line);box-shadow:0 4px 16px var(--shadow)}
+#toast{background:#00677E;color:#fff;box-shadow:0 8px 24px var(--shadow)}
+.auth-background{background:transparent}.auth-background:after,.auth-background>div{display:none}
+#auth-dialog,#consent-preview,#remove-account-dialog{background:var(--card)!important;color:var(--ink)!important;border-color:var(--line)!important;box-shadow:0 24px 70px var(--shadow)}
+dialog p{color:var(--muted)}dialog::backdrop{background:rgba(28,39,51,.25)}
+.auth-art{background:linear-gradient(140deg,rgba(70,199,221,.08),rgba(181,154,232,.05)),var(--surface);border-color:var(--line)}
+.auth-art>img{mix-blend-mode:normal}.auth-art:after{opacity:.2}
+.auth-tabs button{color:var(--muted)}.auth-tabs button.active{color:#00576B}.auth-tabs button.active:after{background:#00677E;box-shadow:none}
+.auth-switch{color:var(--muted)!important}
+.notice,.settings-jumps a{background:var(--surface);color:var(--muted);border-color:var(--line)}
+.settings-card p,.settings-card li,.settings-card summary,.settings-grid label,.settings-preview-controls label,.settings-table td,.settings-table caption{color:var(--muted)}
+.settings-table th{background:var(--surface);color:var(--ink)}.settings-table td,.settings-table th{border-color:var(--line)}
+.settings-notification,.settings-notification[data-channel=email],.settings-notification[data-channel=inbox]{background:var(--card);color:var(--ink);border-color:var(--line);box-shadow:0 8px 24px var(--shadow)}
+@media(prefers-reduced-motion:reduce){body::before{animation:none}}
+.preview-placeholder h3{color:var(--ink);text-shadow:none}
+.preview-bottom p,.preview-account small,.preview-actions,.preview-bottom .bookmark,.upload-zone u{color:var(--muted)}
+
+/* Preserve the original synthwave artwork beside the light login form. */
+.auth-art{background:radial-gradient(ellipse at 50% 23%,#00a1c51d,transparent 48%),linear-gradient(160deg,#130c22,#180920);border-color:#3c204c;color:#f6eeff}
+.auth-art>img{mix-blend-mode:screen}
+.auth-art:after{opacity:1}
+.auth-art-copy h2{color:#f6eeff}
+.auth-art-copy h2 em{color:#00e5ff}
+.auth-art-copy p{color:#b393c5}
+.auth-kicker{color:#a272b0}
+.auth-art-footer{color:#79558c}

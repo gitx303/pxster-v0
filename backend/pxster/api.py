@@ -16,6 +16,7 @@ from .config import settings
 from .models import ConnectedAccount, LoginSession, MediaAsset, OAuthState, Post, PostDestination, PublishAttempt, Session, User, as_utc, now, uid
 from .security import digest, encrypt_tokens, passwords
 from . import providers, storage
+from .features.router import capabilities, install_reserved_routes
 
 
 @asynccontextmanager
@@ -143,7 +144,7 @@ def health(db=Depends(database)):
 
 @app.get("/config")
 def config():
-    return {"demo": settings.demo, "registration": settings.registration, "platforms": {p: providers.configured(p) for p in providers.PLATFORMS}, "max_upload_bytes": settings.max_upload}
+    return {"features": capabilities(), "demo": settings.demo, "registration": settings.registration, "platforms": {p: providers.configured(p) for p in providers.PLATFORMS}, "max_upload_bytes": settings.max_upload}
 
 
 @app.post("/auth/register", status_code=201)
@@ -193,7 +194,7 @@ def account_view(account):
 
 @app.get("/accounts")
 def accounts(user=Depends(current_user), db=Depends(database)):
-    return [account_view(a) for a in db.scalars(select(ConnectedAccount).where(ConnectedAccount.owner_id == user.id).order_by(ConnectedAccount.platform))]
+    return [account_view(a) for a in db.scalars(select(ConnectedAccount).where(ConnectedAccount.owner_id == user.id, ConnectedAccount.status != "removed").order_by(ConnectedAccount.platform))]
 
 
 @app.post("/accounts/demo/{platform}", status_code=201)
@@ -202,7 +203,7 @@ def demo_account(platform: Literal["facebook", "tiktok", "youtube"], user=Depend
         raise HTTPException(404, "Demo mode is disabled.")
     account = db.scalar(select(ConnectedAccount).where(ConnectedAccount.owner_id == user.id, ConnectedAccount.platform == platform, ConnectedAccount.platform_account_id == f"demo-{platform}"))
     if not account:
-        account = ConnectedAccount(owner_id=user.id, platform=platform, platform_account_id=f"demo-{platform}", display_name=f"Demo {platform.title()}", permissions=["demo.publish"])
+        account = ConnectedAccount(owner_id=user.id, platform=platform, platform_account_id=f"demo-{platform}", display_name=f"Simulation {platform.title()}", permissions=["demo.publish"])
         db.add(account)
     account.status = "connected"
     db.commit()
@@ -215,6 +216,16 @@ def disconnect(account_id: str, user=Depends(current_user), db=Depends(database)
     # Keep the record for historical posts; remove credentials and stop future sends.
     account.status = "disconnected"
     account.encrypted_tokens = None
+    db.commit()
+    return {"ok": True}
+
+
+@app.delete("/accounts/{account_id}/remove")
+def remove_account(account_id: str, user=Depends(current_user), db=Depends(database)):
+    account = owned(db, ConnectedAccount, account_id, user)
+    if account.status != "disconnected" or account.encrypted_tokens is not None:
+        raise HTTPException(409, "Disconnect the channel before removing its entry.")
+    account.status = "removed"
     db.commit()
     return {"ok": True}
 
@@ -399,3 +410,7 @@ def retry(destination_id: str, user=Depends(current_user), db=Depends(database))
     post.state = "publishing"
     db.commit()
     return {"ok": True}
+
+
+# Install last so reservations cannot silently shadow existing API routes.
+install_reserved_routes(app, current_user)

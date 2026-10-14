@@ -61,3 +61,14 @@ def test_production_rejects_demo(monkeypatch):
     monkeypatch.setattr(settings, 'environment', 'production')
     with pytest.raises(RuntimeError, match='Production requires'):
         settings.validate()
+
+
+def test_delivery_domain_preserves_oauth_domain(monkeypatch):
+    monkeypatch.setattr(settings, 'media_url', 'https://media.pxster.xyz/')
+    monkeypatch.setattr(settings, 'api_url', 'https://api.pxster.xyz')
+    monkeypatch.setattr(settings, 'token_key', Fernet.generate_key().decode())
+    assert providers.delivery_url('asset').startswith('https://media.pxster.xyz/media-delivery/asset?')
+    for platform in ['facebook', 'tiktok', 'youtube']:
+        assert providers.callback(platform) == f'https://api.pxster.xyz/oauth/{platform}/callback'
+    monkeypatch.setattr(settings, 'media_url', '')
+    assert providers.delivery_url('asset').startswith('https://api.pxster.xyz/media-delivery/asset?')

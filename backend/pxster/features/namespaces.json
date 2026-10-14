@@ -1,0 +1,254 @@
+{
+  "version": 1,
+  "api_prefix": "/api/v1",
+  "features": {
+    "revisions": {
+      "tables": [
+        "post_revisions"
+      ],
+      "existing_tables": [
+        "posts",
+        "media_assets",
+        "post_destinations"
+      ],
+      "ui": "post-review",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/v1/posts/{post_id}/revisions",
+          "operation_id": "revisions_1"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/posts/{post_id}/revisions",
+          "operation_id": "revisions_2"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/posts/{post_id}/request-approval",
+          "operation_id": "revisions_3"
+        }
+      ],
+      "status": "reserved",
+      "enabled": false,
+      "module": "pxster.features.revisions"
+    },
+    "approvals": {
+      "tables": [
+        "approval_policies",
+        "approval_requests",
+        "approval_decisions"
+      ],
+      "ui": "approvals",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/v1/approvals",
+          "operation_id": "approvals_1"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/approvals/{approval_id}",
+          "operation_id": "approvals_2"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/approvals/{approval_id}/approve",
+          "operation_id": "approvals_3"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/approvals/{approval_id}/reject",
+          "operation_id": "approvals_4"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/approvals/{approval_id}/revoke",
+          "operation_id": "approvals_5"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/approval-policies",
+          "operation_id": "approvals_6"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/approval-policies",
+          "operation_id": "approvals_7"
+        }
+      ],
+      "status": "reserved",
+      "enabled": false,
+      "module": "pxster.features.approvals"
+    },
+    "notifications": {
+      "tables": [
+        "notification_deliveries",
+        "notification_preferences",
+        "push_subscriptions"
+      ],
+      "ui": "notifications",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/v1/notifications",
+          "operation_id": "notifications_1"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/notifications/{notification_id}/read",
+          "operation_id": "notifications_2"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/notification-preferences",
+          "operation_id": "notifications_3"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/notification-preferences",
+          "operation_id": "notifications_4"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/push-subscriptions",
+          "operation_id": "notifications_5"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/v1/push-subscriptions/{subscription_id}",
+          "operation_id": "notifications_6"
+        }
+      ],
+      "status": "reserved",
+      "enabled": false,
+      "module": "pxster.features.notifications"
+    },
+    "passkeys": {
+      "tables": [
+        "passkey_credentials",
+        "webauthn_challenges"
+      ],
+      "existing_tables": [
+        "users",
+        "login_sessions"
+      ],
+      "ui": "security",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/v1/passkeys",
+          "operation_id": "passkeys_1"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/passkeys/registration/options",
+          "operation_id": "passkeys_2"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/passkeys/registration/verify",
+          "operation_id": "passkeys_3"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/passkeys/step-up/options",
+          "operation_id": "passkeys_4"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/passkeys/step-up/verify",
+          "operation_id": "passkeys_5"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/v1/passkeys/{credential_id}",
+          "operation_id": "passkeys_6"
+        }
+      ],
+      "status": "reserved",
+      "enabled": false,
+      "module": "pxster.features.passkeys",
+      "unmounted_routes": [
+        "/api/v1/auth/passkeys/options",
+        "/api/v1/auth/passkeys/verify"
+      ]
+    },
+    "audit": {
+      "tables": [
+        "audit_events"
+      ],
+      "ui": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/v1/posts/{post_id}/audit",
+          "operation_id": "audit_1"
+        }
+      ],
+      "status": "reserved",
+      "enabled": false,
+      "module": "pxster.features.audit"
+    },
+    "receipts": {
+      "tables": [
+        "receipt_artifacts",
+        "signing_key_metadata"
+      ],
+      "existing_tables": [
+        "publish_attempts"
+      ],
+      "ui": "receipts",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/v1/posts/{post_id}/receipts",
+          "operation_id": "receipts_1"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/receipts/{receipt_id}",
+          "operation_id": "receipts_2"
+        }
+      ],
+      "status": "reserved",
+      "enabled": false,
+      "module": "pxster.features.receipts"
+    },
+    "reports": {
+      "tables": [
+        "performance_reports"
+      ],
+      "ui": "reports",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/v1/posts/{post_id}/reports",
+          "operation_id": "reports_1"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/reports/{report_id}",
+          "operation_id": "reports_2"
+        }
+      ],
+      "status": "reserved",
+      "enabled": false,
+      "module": "pxster.features.reports"
+    },
+    "webhooks": {
+      "tables": [
+        "webhook_events"
+      ],
+      "ui": null,
+      "routes": [],
+      "status": "reserved",
+      "enabled": false,
+      "module": "pxster.features.webhooks",
+      "unmounted_routes": [
+        "/api/v1/webhooks/meta",
+        "/api/v1/webhooks/tiktok"
+      ]
+    }
+  }
+}

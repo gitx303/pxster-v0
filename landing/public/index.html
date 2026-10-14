@@ -1,16 +1,62 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080411"><meta name="description" content="Create, schedule, and publish to Facebook, TikTok, and YouTube from one neon-lit workspace."><title>Pxster — Create at your own frequency.</title><link rel="icon" href="assets/pxster-logo.png"><link rel="stylesheet" href="style.css"><script src="landing.js" defer></script></head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090515">
+  <meta name="description" content="Pxster is under construction. A new frequency for creators is coming. Existing testers can log in.">
+  <title>Pxster — A new frequency is coming.</title>
+  <link rel="icon" href="/assets/pxster-short.png">
+  <link rel="stylesheet" href="/construction.css">
+  <script src="/construction.js" defer></script>
+</head>
 <body>
-  <header class="site-header"><a class="brand" href="/" aria-label="Pxster home"><span class="logo-crop"><img src="assets/pxster-short.png" alt=""></span><span>PXSTER<span class="brand-dot">.</span></span></a><nav aria-label="Main navigation"><a class="nav-link" href="#workflow">The workflow</a><a class="nav-link" href="#channels">Your channels</a><a class="login-link" data-auth="login" href="https://app.pxster.xyz/?auth=login">Log in <span>↗</span></a><a class="button compact" data-auth="signup" href="https://app.pxster.xyz/?auth=signup">Sign up <span>→</span></a></nav></header>
+  <div class="scene" aria-hidden="true"><div class="stars"></div><div class="twinkles"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="planet planet-ring"></div><div class="planet planet-blue"></div><div class="planet planet-small"></div>
+    <div class="ufo"><svg viewBox="0 0 260 190" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="hull" x2="0" y2="1"><stop stop-color="#633f94"/><stop offset=".5" stop-color="#141029"/><stop offset="1" stop-color="#ff26be"/></linearGradient><linearGradient id="glass" x2="0" y2="1"><stop stop-color="#00e5ff" stop-opacity=".8"/><stop offset="1" stop-color="#122445"/></linearGradient><linearGradient id="beam" x2="0" y2="1"><stop stop-color="#a5f7ff" stop-opacity=".16"/><stop offset=".45" stop-color="#67eaff" stop-opacity=".055"/><stop offset="1" stop-color="#00e5ff" stop-opacity="0"/></linearGradient><filter id="soft-beam" x="-80%" y="-30%" width="260%" height="200%"><feGaussianBlur stdDeviation="5"/></filter></defs>
+      <path class="ufo-beam" d="M99 105 5 275H245L161 105Z" fill="url(#beam)" filter="url(#soft-beam)"/>
+      <ellipse cx="130" cy="99" rx="101" ry="26" fill="url(#hull)" stroke="#ff26be" stroke-width="2"/>
+      <path d="M87 83C90 23 165 21 174 83Z" fill="url(#glass)" stroke="#7df4ff" stroke-width="2"/>
+      <path d="M101 61Q113 43 131 44" fill="none" stroke="#d2fcff" stroke-width="3" stroke-linecap="round"/>
+      <ellipse cx="130" cy="87" rx="111" ry="17" fill="url(#hull)" stroke="#00e5ff" stroke-width="2"/>
+      <path d="M22 91Q130 120 239 91" fill="none" stroke="#b2faff" stroke-width="2"/>
+      <g fill="#00e5ff"><ellipse cx="62" cy="98" rx="6" ry="3"/><ellipse cx="104" cy="106" rx="6" ry="3"/><ellipse cx="148" cy="106" rx="6" ry="3"/><ellipse cx="191" cy="98" rx="6" ry="3"/></g>
+    </svg></div><div class="space-frog" hidden><svg viewBox="0 0 80 70" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g stroke="#00e5ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M25 43 10 48 20 59 5 63M55 43 70 48 60 59 75 63" fill="none"/>
+        <path d="M29 35 18 28 8 32M51 35 62 28 72 32" fill="none"/>
+        <ellipse cx="40" cy="42" rx="18" ry="20" fill="#176377"/>
+        <ellipse cx="40" cy="43" rx="10" ry="13" fill="#b59ae8" stroke="none"/>
+        <path d="M20 25Q18 13 28 12Q35 11 36 20H44Q45 11 52 12Q62 13 60 25Q64 38 40 39Q16 38 20 25Z" fill="#00b9cf"/>
+      </g>
+      <g fill="#090515"><ellipse cx="28" cy="23" rx="4" ry="6"/><ellipse cx="52" cy="23" rx="4" ry="6"/></g>
+      <g fill="#e9fcff"><circle cx="27" cy="21" r="1.5"/><circle cx="51" cy="21" r="1.5"/></g>
+      <path d="M31 32Q40 37 49 32" fill="none" stroke="#ff26be" stroke-width="2.5" stroke-linecap="round"/>
+    </svg></div><div class="sun"></div><div class="mountains"></div><div class="horizon"></div><div class="workspace-glow"></div><div class="grid"></div><canvas class="wave-grid"></canvas><div class="scanlines"></div></div>
+  <header>
+    <a class="brand" href="/" aria-label="Pxster home"><span class="mark"><img src="/assets/pxster-short.png" alt=""></span><span>PXSTER<span class="dot">.</span></span></a>
+  </header>
   <main>
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-copy"><div class="eyebrow"><span class="live-dot"></span> YOUR CONTENT. YOUR FREQUENCY.</div><h1 id="hero-title">CREATE.<br>PUBLISH.<br><span class="neon-type">MAKE WAVES.</span></h1><p class="hero-description">Big ideas don’t belong in drafts.<br>Bring your Facebook, TikTok, and YouTube together.<br>One workspace. Every next move.</p><div class="hero-actions"><a class="button" data-auth="signup" href="https://app.pxster.xyz/?auth=signup">Start your next era <span>↗</span></a><a class="secondary-link" href="#workflow">Explore the workflow <span>↓</span></a></div><p class="hero-note"><span>01 / UPLOAD</span><span>02 / CREATE</span><span>03 / GO LIVE</span></p></div>
-      <div class="hero-scene" aria-label="Pxster cyan and magenta neon logo above a retro grid"><div class="scene-stars"></div><div class="orbit-ring"></div><div class="sun-disc"></div><div class="horizon"></div><div class="retro-grid"></div><img class="hero-logo" src="assets/pxster-logo.png" alt="Pxster PX logo in electric cyan and magenta"><div class="scene-topline"><span>PX / TRANSMISSION 001</span><span class="signal-bars">▂▄▆█</span></div><div class="scene-bottomline"><span>CREATE WITHOUT LIMITS</span><span>EST. NOW ↗</span></div><span class="scene-coordinate">22° / CREATIVE ENERGY</span></div>
-    </section>
-    <section class="channel-strip" id="channels" aria-label="Supported platforms"><span class="strip-label">YOUR WORLD.<br>CONNECTED.</span><div><span class="channel-symbol fb">f</span>Facebook</div><span class="separator">✦</span><div><span class="channel-symbol tt">♪</span>TikTok</div><span class="separator">✦</span><div><span class="channel-symbol yt">▶</span>YouTube</div><span class="strip-end">THREE CHANNELS.<br>ONE CONTROL ROOM.</span></section>
-    <section class="workflow-section" id="workflow"><div class="section-heading"><div><div class="eyebrow magenta">LESS FRICTION. MORE FREQUENCY.</div><h2>From spark<br>to <span>signal.</span></h2></div><p>Keep your creative momentum.<br>Everything between “I made this” and<br>“it’s out there,” in one place.</p></div><div class="workflow-layout"><div class="steps"><article><span>01</span><div><h3>Drop your media.</h3><p>Upload your image or video. Get a validation check before it reaches your channels.</p></div><span class="step-glyph">↥</span></article><article><span>02</span><div><h3>Find your words.</h3><p>Write the caption. Preview the post. Make it sound unmistakably like you.</p></div><span class="step-glyph">⌁</span></article><article><span>03</span><div><h3>Choose your destinations.</h3><p>Select your accounts and set the visibility that fits each platform.</p></div><span class="step-glyph">◎</span></article><article><span>04</span><div><h3>Own your timing.</h3><p>Publish now or schedule ahead. Follow every result in your publishing history.</p></div><span class="step-glyph">↗</span></article></div><div class="control-preview" aria-label="Illustration of the Pxster publishing workflow"><div class="terminal-bar"><span><i></i><i></i><i></i></span><span>PXSTER / MISSION CONTROL</span><span>↗</span></div><div class="preview-content"><div class="preview-label">YOUR NEXT TRANSMISSION <span>ILLUSTRATIVE PREVIEW</span></div><div class="art-preview"><div class="art-sun"></div><div class="art-grid"></div><span>MAKE<br><em>WAVES.</em></span><small>ORIGINAL IDEAS. EVERYWHERE.</small></div><p class="sample-caption">Something new is on the horizon. ✦</p><div class="preview-destinations"><span>f &nbsp; Facebook</span><span>♪ &nbsp; TikTok</span><span>▶ &nbsp; YouTube</span></div><div class="preview-footer"><span>YOUR POST. YOUR MOMENT.</span><span class="mock-button">Ready to publish ↗</span></div></div></div></div></section>
-    <section class="manifesto"><div class="eyebrow">BUILT FOR WHAT COMES NEXT</div><h2>More creating.<br><span>Less switching tabs.</span></h2><p>A composer that keeps up. A schedule that stays put.<br>A clear view of what published—and what needs your attention.</p><a class="button" data-auth="signup" href="https://app.pxster.xyz/?auth=signup">Create your account <span>↗</span></a><div class="manifesto-grid"></div></section>
+    <p class="eyebrow"><span class="signal"></span> TRANSMISSION IN PROGRESS</p>
+    <h1>A NEW FREQUENCY<br><span id="coming-line">IS COMING.</span></h1>
+    <div class="status" aria-label="Under construction"><span aria-hidden="true">//</span><span class="status-story" aria-hidden="true"><span class="status-copy" data-story="construction">UNDER CONSTRUCTION</span><span class="status-copy" data-story="pond">AN OLD POND...</span><span class="status-copy" data-story="plop">A <em>PLOP!</em> MAKING WAVES</span></span></div>
+    <a class="scroll-login" href="#login">Scroll to log in <span aria-hidden="true">↓</span></a>
   </main>
-  <footer><a class="brand footer-brand" href="/" aria-label="Pxster home"><img src="assets/pxster-full.png" alt="Pxster"></a><span>YOUR CONTENT. YOUR FREQUENCY.</span><div><a data-auth="login" href="https://app.pxster.xyz/?auth=login">Log in</a><a data-auth="signup" href="https://app.pxster.xyz/?auth=signup">Sign up ↗</a></div></footer>
-</body></html>
+  <section id="login" class="login-section" aria-labelledby="login-heading">
+    <div class="login-panel">
+      <p class="eyebrow">YOUR CREATOR WORKSPACE</p>
+      <h2 id="login-heading">FOR THE PXSTS<br><span>THAT MAKE WAVES</span></h2>
+      <div class="login-dropdown">
+        <button class="login" type="button" id="login-toggle" aria-expanded="false" aria-controls="login-options">Log in to Pxster <span aria-hidden="true">⌄</span></button>
+        <div id="login-options" class="login-options" hidden>
+          <a href="https://app.pxster.xyz/">Creator Access <span aria-hidden="true">↗</span></a>
+          <a href="https://dev.pxster.xyz/">Dev Space <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+      <p class="access-note">Private test access · Log in required</p>
+    </div>
+  </section>
+  <footer><img src="/assets/pxster-full.png" alt="Pxster"><span>© 2026 X303 <span class="separator">/</span> MAKE IT MAKE WAVES.</span></footer>
+</body>
+</html>

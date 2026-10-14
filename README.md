@@ -1,3 +1,7 @@
+# Deployment ownership update — 2026-10-14
+
+Only landing/app Cloudflare frontend deployments are owned here. API/media Workers and their operational files moved to `../social-media-tool-publisher/infrastructure/cloudflare/`. Local FastAPI remains unchanged. See docs/cloudflare-test.md.
+
 # Pxster
 
 A Cloudflare-ready publishing foundation for **Facebook Pages, TikTok, and YouTube**.
@@ -5,6 +9,10 @@ A Cloudflare-ready publishing foundation for **Facebook Pages, TikTok, and YouTu
 Creator uploads media → writes a caption → selects accounts → publishes now or schedules.
 
 This folder contains working application code and deployment configuration. **No Cloudflare resources, domains, developer apps, or live social accounts have been provisioned by creating these files.** Provider adapters require credentials, permissions, and live verification before launch.
+
+## Cloudflare Free connection test
+
+A separate Workers/D1 implementation supports a private single-operator TikTok Sandbox connection test. See [setup, security boundaries, and usage observations](docs/cloudflare-test.md). Uploads and publishing are disabled in this deployment; the full FastAPI workflow below remains separate.
 
 ## Run locally
 
@@ -25,8 +33,9 @@ Open <http://localhost:5174> for the landing page. Choose **Log in** or **Sign u
 
 | Address | Service | Can change independently |
 | --- | --- | --- |
-| `pxster.xyz` | Cloudflare Pages → `landing/public` | Landing design and hosting |
-| `app.pxster.xyz` | Cloudflare Pages → `app/public` | App design and frontend implementation |
+| `pxster.xyz` | Workers Static Assets → `landing/public` | Landing design and hosting |
+| `app.pxster.xyz` | Workers Static Assets → `app/public` | App design and frontend implementation |
+| `media.pxster.xyz` | Delivery Worker → signed API → private R2 | Controlled media delivery |
 | `api.pxster.xyz` | Cloudflare Tunnel → FastAPI Docker service | Docker host and backend infrastructure |
 
 Private Cloudflare R2 stores media. PostgreSQL stores relational records and the durable queue. The worker runs alongside FastAPI, polls due destinations, and records platform responses. D1, KV, and Cloudflare Queues are not required for this deployment: PostgreSQL keeps the FastAPI backend portable and transactionally couples post creation with its queue entries.
@@ -44,7 +53,7 @@ See [Cloudflare deployment](docs/cloudflare.md), [data and publishing behavior](
 - UTC scheduling that survives API restarts; independent per-account results.
 - Idempotent post creation, bounded automatic retries, and explicit unknown-result handling.
 - Facebook photo/video, TikTok Direct Post video, and YouTube resumable video adapters.
-- Alembic migration, Docker Compose, two Pages configurations, and isolated tests.
+- Alembic migration, Docker Compose, Workers Static Assets and signed media delivery configurations, and isolated tests.
 
 ## Current boundaries
 
@@ -55,3 +64,11 @@ Provider processing is tracked by polling; webhook receivers are deliberately no
 ## Branding and accounts
 
 The original supplied PNG is copied unchanged to both frontends under `public/assets/pxster-logo.png`; CSS controls its presentation. Production Sign up follows `ALLOW_REGISTRATION` (enabled in `.env.example`). Preview credentials are created only in the local database and are not embedded in the frontend, source, or distribution ZIP. The username migration preserves existing email-only accounts.
+
+Policy routes `/privacy`, `/terms`, and `/data-deletion` are supplied as drafts pending operator/contact details and review. See the deployment guide before publishing.
+
+## Upcoming security features
+
+Approval, notification, passkey, audit, receipt, and reporting namespaces are reserved but disabled. See [namespace ownership and activation rules](docs/feature-namespaces.md). Authenticated placeholders return 501; the current publishing worker does not yet require approval.
+
+Try the interactive notification design at `http://localhost:5174/notification-preview.html` after starting the local demo. It uses sample data only and never sends notifications or approves/publishes posts. In Workers Static Assets the clean URL is `/notification-preview`.

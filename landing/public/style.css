@@ -2,3 +2,5 @@
 
 .brand{color:#fff}.brand .logo-crop img{width:143%;height:auto;left:-21.5%;top:50%;transform:translateY(-52.3%)}
 .footer-brand{display:block;position:relative;width:180px;height:58px;overflow:hidden;flex-shrink:0}.footer-brand img{position:absolute;width:210px;height:auto;max-width:none;left:-15px;top:-13px}
+
+.footer-links{flex-wrap:wrap}

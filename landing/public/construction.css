@@ -1,0 +1,113 @@
+:root{color-scheme:dark;--cyan:#00e5ff;--pink:#ff26be;--ink:#090515}*{box-sizing:border-box}body{margin:0;min-height:100svh;background:var(--ink);color:#fff;font-family:Arial,Helvetica,sans-serif;display:flex;flex-direction:column;isolation:isolate}a{color:inherit;text-decoration:none}a:focus-visible{outline:3px solid var(--cyan);outline-offset:7px}.scene{position:fixed;inset:0;z-index:-1;overflow:hidden;background:radial-gradient(ellipse at 50% 64%,#65134955 0,transparent 48%),linear-gradient(#090515 10%,#160a2b 55%,#19072c 70%,#090515)}.stars{position:absolute;inset:0;background-image:radial-gradient(1px 1px at 12% 20%,#bbedff 80%,transparent),radial-gradient(1px 1px at 28% 36%,#a897d6 80%,transparent),radial-gradient(2px 2px at 75% 21%,#d6cbff 80%,transparent),radial-gradient(1px 1px at 88% 43%,#00d9ff 80%,transparent),radial-gradient(1px 1px at 61% 11%,#dbc8ff 80%,transparent);background-size:490px 390px;opacity:.65}.sun{position:absolute;width:min(65vw,560px);aspect-ratio:1;border-radius:50%;left:50%;top:36%;transform:translateX(-50%);background:linear-gradient(#ff36bd44,#ff38bc12);box-shadow:0 0 110px #e8156e20;mask-image:repeating-linear-gradient(to bottom,#000 0,#000 14px,transparent 14px,transparent 18px)}.horizon{position:absolute;top:73%;left:-10%;width:120%;height:1px;background:#ff30c2;box-shadow:0 0 13px 3px #ff30c27a}.grid{position:absolute;top:73%;left:-75%;width:250%;height:85%;background-image:linear-gradient(#de20c03d 1px,transparent 1px),linear-gradient(90deg,#00dfff35 1px,transparent 1px);background-size:70px 45px;transform:perspective(280px) rotateX(57deg);transform-origin:center top;mask-image:linear-gradient(#000,transparent 85%)}.scanlines{position:absolute;inset:0;background:repeating-linear-gradient(transparent 0,transparent 3px,#0002 4px);pointer-events:none;opacity:.35}header{height:108px;padding:24px 6vw;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:25px;letter-spacing:2px}.dot{color:var(--pink)}.mark{width:53px;height:42px;position:relative;overflow:hidden}.mark img{position:absolute;width:76px;max-width:none;left:-11px;top:-20px}.nav-login{font-size:13px;letter-spacing:1px;border:1px solid #ffffff35;padding:12px 22px;border-radius:4px;background:#ffffff04}.nav-login span{color:var(--cyan);margin-left:15px}.nav-login:hover{border-color:var(--cyan)}main{flex:1;text-align:center;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:44px 20px 90px}.eyebrow{font-size:10px;letter-spacing:3px;color:#a6eaf4;margin:0 0 28px;display:flex;gap:12px;align-items:center}.signal{width:6px;height:6px;background:var(--cyan);border-radius:50%;box-shadow:0 0 12px var(--cyan)}h1{font-size:clamp(38px,6.7vw,96px);font-weight:900;line-height:.99;letter-spacing:-.055em;margin:0;text-shadow:3px 3px #ff26be20}h1 span{color:var(--cyan);text-shadow:0 0 34px #00e5ff35}.status{display:flex;align-items:center;gap:12px;font-size:11px;font-weight:bold;letter-spacing:3px;margin-top:34px;padding:11px 18px;border:1px solid #ff26be60;border-radius:3px;color:#ffb1e7;background:#160a23aa}.status span{color:var(--pink)}.description{font-size:15px;line-height:1.9;color:#bbb2ce;margin:23px 0 28px}.login{display:flex;gap:45px;align-items:center;padding:16px 24px;background:var(--cyan);color:#080a19;font-weight:700;font-size:14px;border-radius:4px;box-shadow:0 0 30px #00e5ff25;transition:box-shadow .2s,transform .2s}.login:hover{transform:translateY(-2px);box-shadow:0 0 40px #00e5ff55}.access-note{font-size:10px;letter-spacing:1px;color:#ada0bc;margin-top:16px}footer{padding:20px 6vw 26px;display:flex;justify-content:space-between;align-items:center;gap:20px}footer img{width:116px;height:45px;object-fit:contain}footer>span{font-size:9px;letter-spacing:1.5px;color:#a298b1}.separator{color:var(--pink);margin:0 12px}@media(max-width:600px){header{height:88px;padding:20px 23px}.brand{font-size:20px}.nav-login{padding:10px 15px}main{padding-top:45px;padding-bottom:65px}.eyebrow{font-size:8px;letter-spacing:2px}h1{font-size:clamp(34px,8.8vw,52px)}.description{font-size:13px}.status{font-size:9px;letter-spacing:2px}.sun{top:45%;width:90vw}footer{padding:12px 23px 24px;flex-direction:column;gap:8px}footer img{width:100px;height:36px}.horizon,.grid{top:76%}}@media(prefers-reduced-motion:reduce){.login{transition:none}.login:hover{transform:none}}
+/* Lightweight decorative scene: no image downloads or server-side animation. */
+.scene{pointer-events:none}.grid{background-position:var(--grid-x,0px) var(--grid-y,0px)}.planet{position:absolute;border-radius:50%;box-shadow:inset -18px -12px 24px #060413b0,0 0 30px #7c31c533}.planet-ring{width:100px;height:100px;right:10%;top:19%;background:repeating-linear-gradient(165deg,#8c4cba 0 10px,#54287c 12px 20px,#be599d 24px 27px);transform:rotate(-18deg)}.planet-ring:after{content:"";position:absolute;inset:31px -38px;border:9px solid #a469cf99;border-left-color:#00d9ff88;border-bottom-color:#df74d8;border-radius:50%;transform:rotate(-12deg);box-shadow:0 0 15px #cf50c733}.planet-blue{width:48px;height:48px;left:26%;top:15%;background:radial-gradient(circle at 30% 24%,#b1edff,#2097ba 30%,#291851 75%)}.planet-small{width:27px;height:27px;right:23%;top:58%;background:radial-gradient(circle at 30% 25%,#ffb8d9,#ba2a8b 40%,#261147 80%)}.ufo{position:absolute;left:3%;top:44%;width:clamp(120px,19vw,250px);filter:drop-shadow(0 0 12px #00e5ff35);animation:hover-saucer 7s ease-in-out infinite}.ufo svg{display:block;width:100%;height:auto}.twinkles{position:absolute;inset:0}.twinkles i{position:absolute;width:3px;height:3px;border-radius:50%;background:#c6faff;box-shadow:0 0 7px #00e5ff;animation:twinkle 4s ease-in-out infinite}.twinkles i:nth-child(1){left:8%;top:15%}.twinkles i:nth-child(2){left:19%;top:35%;animation-delay:-2s}.twinkles i:nth-child(3){left:37%;top:10%;animation-delay:-1s}.twinkles i:nth-child(4){left:55%;top:22%;animation-delay:-3s}.twinkles i:nth-child(5){left:72%;top:12%;animation-delay:-.6s}.twinkles i:nth-child(6){left:93%;top:37%;animation-delay:-2.6s}.twinkles i:nth-child(7){left:84%;top:64%;animation-delay:-1.6s}.twinkles i:nth-child(8){left:14%;top:70%;animation-delay:-3.5s}.twinkles i:nth-child(9){left:44%;top:66%;animation-delay:-1.3s}.twinkles i:nth-child(10){left:67%;top:47%;animation-delay:-2.3s}.twinkles i:nth-child(11){left:4%;top:41%;animation-delay:-.3s}.twinkles i:nth-child(12){left:96%;top:18%;animation-delay:-3.3s}@keyframes twinkle{0%,100%{opacity:.18;transform:scale(.7)}50%{opacity:1;transform:scale(1.25)}}@keyframes hover-saucer{0%,100%{transform:translateY(0) rotate(-9deg)}50%{transform:translateY(-15px) rotate(-5deg)}}@media(max-width:600px){.ufo{width:115px;left:-12px;top:61%;opacity:.75}.planet-ring{width:60px;height:60px;right:9%;top:16%;opacity:.8}.planet-ring:after{inset:18px -23px;border-width:6px}.planet-blue{width:30px;height:30px;left:12%;top:23%}.planet-small{right:8%;top:66%}}@media(prefers-reduced-motion:reduce){.ufo,.twinkles i{animation:none}.twinkles i{opacity:.65}.grid{background-position:0 0}}
+.wave-grid{position:absolute;left:0;top:73%;width:100%;height:27%;display:none;mask-image:linear-gradient(#000 35%,#0009 80%,transparent)}.wave-ready .wave-grid{display:block}.wave-ready .grid{visibility:hidden}@media(max-width:600px){.wave-grid{top:76%;height:24%}}@media(prefers-reduced-motion:reduce){.wave-ready .wave-grid{display:none}.wave-ready .grid{visibility:visible}}
+
+.status + .login{margin-top:28px}
+
+.mountains{position:absolute;left:0;bottom:27%;width:100%;height:clamp(90px,18vh,190px);background:url("/assets/horizon-mountains.svg") center bottom/100% 100% no-repeat;opacity:.7;filter:drop-shadow(0 0 3px #da3cc522)}@media(max-width:600px){.mountains{bottom:24%;height:100px;background-size:150% 100%}}
+
+/* Cyan reflection directly beneath the centered workspace entrance. */
+.workspace-glow{position:absolute;left:50%;top:68%;width:min(68vw,850px);height:34%;transform:translateX(-50%);background:radial-gradient(ellipse at 50% 25%,#00e5ff24 0%,#00dfff10 28%,transparent 70%);pointer-events:none}.horizon{background:linear-gradient(90deg,#ff30c255 0%,#ff30c299 25%,#00e5ff 47%,#b0fbff 50%,#00e5ff 53%,#ff30c299 75%,#ff30c255 100%)}.login{box-shadow:0 0 28px #00e5ff55,0 22px 65px #00e5ff35}@media(max-width:600px){.workspace-glow{top:71%;width:95vw;height:29%}.mountains{background-size:100% 100%}}
+
+/* A solid upper disc gives way to progressively wider horizontal cuts. */
+.sun{background:linear-gradient(to top,#ad167e 0%,#d62caa 35%,#da539e 72%,#c879a2 100%);opacity:.19;box-shadow:0 0 85px #cf24951c;mask-image:linear-gradient(to bottom,#000 0% 38%,transparent 38% 39%,#000 39% 48%,transparent 48% 50%,#000 50% 58%,transparent 58% 61%,#000 61% 68%,transparent 68% 72%,#000 72% 78%,transparent 78% 83%,#000 83% 88%,transparent 88% 94%,#000 94% 97%,transparent 97% 100%)}
+
+/* Foreground saucer, facing forward; keep all controls above the scenery. */
+.ufo{z-index:2;top:55%;left:3%;width:clamp(145px,21vw,280px)}
+@keyframes hover-saucer{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+@media(max-width:600px){.ufo{top:64%;left:-12px;width:125px;opacity:.9}}
+
+/* Scroll through the scene to the login entry point. */
+html{scroll-behavior:smooth}
+main{flex:none;min-height:calc(100svh - 108px)}
+.scroll-login{margin-top:32px;font-size:12px;letter-spacing:1px;color:var(--cyan)}
+.scroll-login span{display:block;margin-top:14px;font-size:24px}
+.login-section{min-height:90svh;display:grid;place-items:center;padding:80px 24px;scroll-margin-top:24px;text-align:center}
+.login-panel{padding:42px clamp(24px,5vw,64px);border:1px solid #00e5ff35;border-radius:12px;background:#090515dc;backdrop-filter:blur(12px)}
+.login-panel .eyebrow{justify-content:center}
+.login-panel h2{font-size:clamp(34px,6vw,68px);line-height:1.05;letter-spacing:-.04em;margin:0 0 32px}
+.login-panel h2 span{color:var(--cyan)}
+.sun{translate:0 calc(var(--scene-scroll,0px) * -.07)}
+.planet-ring{translate:0 calc(var(--scene-scroll,0px) * -.2)}
+.planet-blue{translate:0 calc(var(--scene-scroll,0px) * -.32)}
+.planet-small{translate:0 calc(var(--scene-scroll,0px) * -.4)}
+.ufo{translate:calc(var(--scene-scroll,0px) * .08) calc(var(--scene-scroll,0px) * -.52)}
+@media(max-width:600px){main{min-height:calc(100svh - 88px)}.login-section{min-height:85svh}.login-panel{width:100%;max-width:440px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.sun,.planet,.ufo{translate:none}}
+
+/* One gentle terrain layer keeps the sea, shoreline and mountain bases together. */
+.mountains,.horizon,.workspace-glow,.grid,.wave-grid{translate:0 var(--terrain-scroll,0px)}
+@media(prefers-reduced-motion:reduce){.mountains,.horizon,.workspace-glow,.grid,.wave-grid{translate:none}}
+
+/* Saucer stays with the login panel rather than flying upward on scroll. */
+.login-panel{position:relative}
+.login-panel .ufo{position:absolute;left:-45px;top:-72px;width:150px;translate:none;pointer-events:none;opacity:.9;animation:login-saucer-hover 7s ease-in-out infinite}
+@keyframes login-saucer-hover{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@media(max-width:600px){.login-panel .ufo{left:-10px;top:-62px;width:115px}}
+@media(prefers-reduced-motion:reduce){.login-panel .ufo{animation:none}}
+
+/* Start beside the hero, then glide to the login panel as the page scrolls. */
+.scene .ufo{translate:none;animation:login-saucer-hover 7s ease-in-out infinite}
+@media(prefers-reduced-motion:reduce){.scene .ufo{animation:none}}
+
+/* A soft leftward searchlight; the hull faces forward on arrival at Login. */
+.scene .ufo svg{overflow:visible;transform:rotate(var(--ufo-tilt,-8deg));transform-origin:50% 48%}
+.ufo-beam{transform:rotate(var(--beam-angle,20deg));transform-origin:130px 105px}
+
+/* Raise the first-screen transmission block without changing scroll length. */
+main{padding-top:20px;padding-bottom:190px}
+@media(max-width:600px){main{padding-top:20px;padding-bottom:135px}}
+
+/* Start the reflection at the shoreline, avoiding a separate glow edge above it. */
+.scene{--shoreline:73%}
+.horizon,.grid,.wave-grid,.workspace-glow{top:var(--shoreline)}
+.mountains{bottom:calc(100% - var(--shoreline))}
+.workspace-glow{background:radial-gradient(ellipse at 50% 0%,#00e5ff24 0%,#00dfff10 28%,transparent 70%)}
+.wave-grid{height:calc(100% - var(--shoreline) + 24px)}
+@media(max-width:600px){.scene{--shoreline:76%}}
+
+/* A quieter, focused login headline with generous negative space. */
+.login-panel{width:min(100%,760px);padding:64px clamp(28px,6vw,80px)}
+.login-panel h2{font-size:clamp(24px,4.2vw,48px);line-height:1.18;letter-spacing:-.025em;margin:0 0 38px}
+.login-panel .eyebrow{margin-bottom:30px}
+.login-panel .login{width:fit-content;margin-inline:auto}
+@media(max-width:600px){.login-panel{padding:44px 24px}.login-panel h2{font-size:clamp(22px,5.4vw,32px);margin-bottom:30px}}
+
+/* Compact login panel, retaining comfortable space around the headline. */
+.login-panel{width:min(100%,620px);padding:48px 36px}
+@media(max-width:600px){.login-panel{max-width:400px;padding:36px 24px}}
+
+
+/* Match the app login artwork's bold italic headline typography. */
+.login-panel h2{font-family:"Arial Black",Arial,sans-serif;font-weight:900;font-style:italic;letter-spacing:-.045em}
+
+/* Access selector keeps the existing cyan login button. */
+.login-dropdown{position:relative;width:fit-content;max-width:100%;margin-inline:auto;text-align:left;z-index:2}
+.login-dropdown .login{border:0;font-family:inherit;cursor:pointer;max-width:100%}
+.login-dropdown .login:focus-visible{outline:3px solid #fff;outline-offset:5px}
+.login-options{position:absolute;top:calc(100% + 8px);left:0;width:100%;min-width:210px;padding:6px;background:#100b20;border:1px solid #00e5ff60;border-radius:6px;box-shadow:0 12px 30px #0006}
+.login-options[hidden]{display:none}
+.login-options a{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:13px 14px;border-radius:3px;color:#dffbff;font-size:14px;font-weight:700}
+.login-options a:hover,.login-options a:focus-visible{background:#00e5ff20;outline:2px solid var(--cyan);outline-offset:-2px}
+
+/* One quiet, decorative visitor; never intercepts login or grid input. */
+.space-frog{position:absolute;left:0;top:0;width:48px;height:42px;pointer-events:none;z-index:4;filter:drop-shadow(0 0 5px #00e5ff66);will-change:transform,opacity}
+.space-frog[hidden]{display:none}
+.space-frog svg{display:block;width:100%;height:100%}
+@media(prefers-reduced-motion:reduce){.space-frog{display:none}}
+
+.ufo-frog-trigger{position:fixed;z-index:5;padding:0;border:0;border-radius:50%;background:transparent;cursor:pointer;touch-action:manipulation}
+.ufo-frog-trigger[hidden]{display:none}
+.ufo-frog-trigger:focus-visible{outline:2px solid var(--cyan);outline-offset:4px;box-shadow:0 0 16px #00e5ff55}
+
+/* Stack the captions to keep the badge and UFO anchor steady during fades. */
+.status .status-story{display:grid;color:inherit}
+.status .status-copy{grid-area:1/1;text-align:center;color:inherit;opacity:0}
+.status .status-copy[data-story="construction"]{opacity:1}
+.status-copy em{color:var(--cyan);font-style:italic}
+
+/* A single, soft glass reflection cues the pond story without moving the badge. */
+.status{position:relative;overflow:hidden;isolation:isolate}
+.status::after{content:"";position:absolute;pointer-events:none;inset:-35% auto -35% -45%;width:35%;background:linear-gradient(105deg,transparent 5%,#a5f7ff0a 25%,#efffff99 48%,#b7f5ff33 62%,transparent 90%);filter:blur(2px);transform:translateX(var(--story-sheen-x,0%)) skewX(-15deg);opacity:var(--story-sheen-opacity,0)}
+@media(prefers-reduced-motion:reduce){.status::after{display:none}}

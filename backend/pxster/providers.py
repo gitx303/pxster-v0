@@ -145,7 +145,7 @@ def media_signature(asset_id, expires):
 
 def delivery_url(asset_id):
     expires = int(time.time()) + 7200
-    return f"{settings.api_url}/media-delivery/{asset_id}?expires={expires}&signature={media_signature(asset_id, expires)}"
+    return f"{(settings.media_url or settings.api_url).rstrip('/')}/media-delivery/{asset_id}?expires={expires}&signature={media_signature(asset_id, expires)}"
 
 
 def creator_info(account, db):

@@ -41,6 +41,6 @@ Manual retries affect only one destination. A successful sibling is not replayed
 
 Uploads are authenticated and validated before storage. Image bytes are inspected by Pillow; MP4 containers, H.264 codec, dimensions and duration are inspected with ffprobe. Validation errors return 422 and do not create publishable media records. Files use immutable owner/UUID object keys, never user-supplied paths. This version buffers up to 64 MiB per media operation; size the API/worker host accordingly and keep upload concurrency conservative.
 
-TikTok uses a signed, two-hour URL on `api.pxster.xyz/media-delivery/`. The handler serves private R2 bytes with range support. Register this URL prefix with TikTok. The R2 S3 hostname is not used as a TikTok verified public domain.
+TikTok uses a signed, two-hour URL on `media.pxster.xyz/media-delivery/` (delivery Worker forwarding to the signed API endpoint). The handler serves private R2 bytes with range support. Register this URL prefix with TikTok. The R2 S3 hostname is not used as a TikTok verified public domain.
 
 Migrations are versioned under `backend/migrations`. Run `alembic -c backend/alembic.ini upgrade head` before starting services. The initial migration is frozen rather than importing the current ORM metadata. Subsequent schema edits require a new migration. Sessions, expired OAuth states, and unused uploads currently need operational retention/cleanup jobs.

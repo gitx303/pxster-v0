@@ -7,6 +7,14 @@ const date = value => new Date(value && !/[Z+]\d*:?\d*$/.test(value) ? value + '
 const badge = value => `<span class="badge ${escape(value)}">${escape(value.replaceAll('_', ' '))}</span>`;
 const icon = platform => `<span class="platform-icon ${platform}">${symbols[platform]}</span>`;
 let toastTimer;
+let consentPreviewAccepted = false;
+const simulatedPlatforms = new Set();
+let previewPlatform = "tiktok";
+const disconnectedSimulations = new Set();
+let removalTarget = null;
+const maskIcon = `<svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" style="vertical-align:middle;fill:currentColor"><path fill-rule="evenodd" d="M2 3l14 2v7c0 5-4 8-7 9-3-2-6-6-6-10L2 3zm3 5 4 1-1 2-3-1V8zm6 1 3 1-1 2-3-1 1-2zm-5 5c2 4 5 4 7 1l-7-1zM18 3l4-1-1 9c0 4-2 7-5 9l-2-1c3-3 4-6 4-10V3z"/></svg>`;
+
+let simulationRun = 0;
 function toast(message) { $('toast').textContent = message; $('toast').hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => $('toast').hidden = true, 6500); }
 function errorBox(id, message) { $(id).textContent = message; $(id).hidden = !message; }
 async function api(path, options = {}) {
@@ -21,20 +29,142 @@ async function api(path, options = {}) {
   }
   return body;
 }
-function selectedAccounts() { return [...document.querySelectorAll('.channel input:checked')].map(input => state.accounts.find(a => a.id === input.value)).filter(Boolean); }
+function availableAccounts() { return [...state.accounts.filter(a => a.status === 'connected'), ...[...simulatedPlatforms].map(platform => ({id: 'simulation-' + platform, platform, display_name: 'pxster-test · Simulation', status: 'connected', simulation: true}))]; }
+$('consent-preview-accept').addEventListener('click', () => {
+  if (!state.user) return;
+  simulatedPlatforms.add(previewPlatform); disconnectedSimulations.delete(previewPlatform);
+  consentPreviewAccepted = true;
+  $('consent-preview').close(); renderAccounts();
+  toast(names[previewPlatform] + ' test channel connected. Select it in Composer.');
+});
+$('consent-preview-cancel').addEventListener('click', () => $('consent-preview').close());
+let channelNoticeTimer, channelNoticeFadeTimer;
+function flashChannelAction(platform, removed = false) {
+  let notice = $('channel-notice');
+  if (!notice) {
+    notice = document.createElement('div'); notice.id = 'channel-notice';
+    notice.setAttribute('role', 'status'); notice.setAttribute('aria-live', 'polite');
+    document.body.append(notice);
+  }
+  clearTimeout(channelNoticeTimer); clearTimeout(channelNoticeFadeTimer);
+  notice.textContent = removed ? 'Account Removed' : 'Disconnected';
+  notice.hidden = false; notice.classList.remove('fading');
+  channelNoticeFadeTimer = setTimeout(() => notice.classList.add('fading'), 1700);
+  channelNoticeTimer = setTimeout(() => { notice.hidden = true; }, 2300);
+}
+async function disconnectChannel(account) {
+  if (!state.user || !account) return;
+  if (account.simulation) {
+    simulatedPlatforms.delete(account.platform);
+    disconnectedSimulations.add(account.platform);
+    consentPreviewAccepted = simulatedPlatforms.size > 0;
+    simulationRun++;
+    if (!consentPreviewAccepted && state.media?.simulation) removeMedia();
+    renderAccounts();
+  } else {
+    await api(`/accounts/${account.id}`, {method: 'DELETE'});
+    await refreshAccounts();
+  }
+  flashChannelAction(account.platform);
+}
+function openRemoval(account) {
+  if (!account) return;
+  removalTarget = account;
+  const connected = account.simulation ? simulatedPlatforms.has(account.platform) : account.status === 'connected';
+  $('remove-account-message').textContent = connected
+    ? 'Disconnect this channel first to stop using it in Composer. This clears its Pxster connection credentials; it does not delete your social account or change its platform settings. Existing publishing history is retained.'
+    : 'This channel is disconnected. Remove its entry from Pxster? Your social account and existing publishing history will remain.';
+  $('remove-account-action').textContent = connected ? 'Disconnect channel first' : 'Remove my Account';
+  $('remove-account-dialog').showModal();
+}
+$('remove-account-cancel').addEventListener('click', () => $('remove-account-dialog').close());
+$('remove-account-action').addEventListener('click', async () => {
+  const account = removalTarget;
+  if (!state.user || !account) return;
+  const connected = account.simulation ? simulatedPlatforms.has(account.platform) : account.status === 'connected';
+  $('remove-account-action').disabled = true;
+  try {
+    if (account.simulation) {
+      if (connected) { simulatedPlatforms.delete(account.platform); disconnectedSimulations.add(account.platform); }
+      else disconnectedSimulations.delete(account.platform);
+      consentPreviewAccepted = simulatedPlatforms.size > 0; simulationRun++;
+      if (!consentPreviewAccepted && state.media?.simulation) removeMedia();
+      renderAccounts();
+    } else {
+      await api(`/accounts/${account.id}${connected ? '' : '/remove'}`, {method: 'DELETE'});
+      await refreshAccounts(); account.status = 'disconnected';
+    }
+    flashChannelAction(account.platform, !connected);
+    if (connected) {
+      $('remove-account-message').textContent = 'Disconnected from Pxster. You can now remove this entry. For a real connection, manage any remaining platform-side authorization in the social platform’s app settings.';
+      $('remove-account-action').textContent = 'Remove my Account';
+    } else { $('remove-account-dialog').close(); }
+  } catch (error) { $('remove-account-message').textContent = error.message; }
+  finally { $('remove-account-action').disabled = false; }
+});
+function selectedAccounts() { return [...document.querySelectorAll('.channel input:checked')].map(input => availableAccounts().find(a => a.id === input.value)).filter(Boolean); }
 function navigate() {
-  const view = ['accounts', 'history'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'composer';
+  const view = ['accounts', 'history', 'settings', 'publishing-approval'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'composer';
   document.querySelectorAll('.view').forEach(el => el.hidden = el.id !== view);
-  document.querySelectorAll('nav a').forEach(el => { el.classList.toggle('active', el.dataset.view === view); if (el.dataset.view === view) el.setAttribute('aria-current', 'page'); else el.removeAttribute('aria-current'); });
-  $('breadcrumb').textContent = 'Workspace / ' + { composer: 'Composer', accounts: 'Connected accounts', history: 'Publishing history' }[view];
+  document.querySelectorAll('nav a[data-view]').forEach(el => { el.classList.toggle('active', el.dataset.view === view); if (el.dataset.view === view) el.setAttribute('aria-current', 'page'); else el.removeAttribute('aria-current'); });
+  $('breadcrumb').textContent = 'Workspace / ' + { composer: 'Composer', accounts: 'Connected accounts', history: 'Publishing history', settings: 'Settings / General Settings', 'publishing-approval': 'Settings / Publishing Approval' }[view];
   if (view === 'history' && state.user) loadHistory().catch(e => toast(e.message));
 }
 window.addEventListener('hashchange', navigate);
 function renderAccounts() {
   const previous = new Set(selectedAccounts().map(a => a.id));
-  $('channel-list').innerHTML = state.accounts.filter(a => a.status === 'connected').map(a => `<label class="channel">${icon(a.platform)}<span>${names[a.platform]}<small>${escape(a.display_name)}</small></span><input type="checkbox" value="${a.id}" ${previous.has(a.id) ? 'checked' : ''} aria-label="Publish to ${escape(a.display_name)}"></label>`).join('') || '<p class="empty-text">Your channels are waiting. <a href="#accounts">Connect your first account →</a></p>';
-  $('account-list').innerHTML = state.accounts.map(a => `<div class="account-row">${icon(a.platform)}<div><strong>${escape(a.display_name)}</strong><small>${names[a.platform]}${a.demo ? ' · Demo account' : ''}${a.expires_at ? ' · Token expires ' + date(a.expires_at) : ''}</small></div>${badge(a.status)}${a.status === 'connected' ? `<button class="text-button" data-disconnect="${a.id}">Disconnect</button>` : ''}</div>`).join('') || '<p class="empty-text">No accounts yet. Choose a platform above to connect.</p>';
-  $('provider-cards').innerHTML = Object.keys(names).map(p => `<article class="provider-card">${icon(p)}<h2>${names[p]}</h2><p>${{ facebook: 'Publish photos and videos to your Facebook Pages.', tiktok: 'Share videos with your TikTok audience.', youtube: 'Upload videos to your YouTube channel.' }[p]}</p><button class="primary" data-connect="${p}">Connect ${names[p]} ↗</button>${state.config?.demo ? `<button class="text-button" data-demo="${p}">Add demo ${names[p]} account</button>` : ''}${!state.config?.platforms[p] ? '<p class="field-note">OAuth credentials need to be configured.</p>' : ''}</article>`).join('');
+  $('channel-list').innerHTML = availableAccounts().map(a => `<label class="channel">${icon(a.platform)}<span>${names[a.platform]}<small>${escape(a.display_name)}</small></span><input type="checkbox" value="${a.id}" ${previous.has(a.id) ? 'checked' : ''} aria-label="Publish to ${escape(a.display_name)}"></label>`).join('') || '<p class="empty-text">Your channels are waiting. <a href="#accounts">Connect your first account →</a></p>';
+  $('provider-cards').innerHTML = Object.keys(names).map(p => `<article class="provider-card" id="provider-${p}">${icon(p)}<h2>${names[p]}</h2><button class="primary" data-connect="${p}">Connect ${names[p]} ↗</button></article>`).join('');
+  if (state.config?.demo || state.config?.connection_test) {
+    for (const platform of Object.keys(names)) {
+      const connected = simulatedPlatforms.has(platform);
+      const card = $('provider-' + platform);
+      const button = document.createElement('button');
+      button.className = 'primary'; button.type = 'button';
+      button.innerHTML = maskIcon + (connected ? ' Channel connected' : ' Connect ' + names[platform]);
+      button.disabled = connected;
+      button.setAttribute('aria-label', names[platform] + ' simulated channel connection');
+      button.addEventListener('click', () => {
+        previewPlatform = platform;
+        $('consent-preview-title').textContent = 'Connect ' + names[platform] + ' — test consent';
+        $('consent-permission').textContent = platform === 'tiktok' ? 'Preview permission: user.info.basic — identify the account and display its name.' : 'Preview permission: identify your ' + names[platform] + ' channel and show it in Composer. No real permissions are requested.';
+        $('consent-preview').showModal();
+      });
+      const simulationAction = document.createElement('div');
+      simulationAction.className = 'simulation-action';
+      card.append(simulationAction);
+      const note = document.createElement('p'); note.className = 'field-note';
+      note.textContent = connected ? 'pxster-test · Connected for simulation' : disconnectedSimulations.has(platform) ? 'pxster-test · Disconnected simulation' : 'Simulation · No real account access';
+      simulationAction.append(note, button);
+    }
+  }
+  for (const platform of Object.keys(names)) {
+    const accounts = state.accounts.filter(a => a.platform === platform && a.status !== 'removed');
+    if (simulatedPlatforms.has(platform) || disconnectedSimulations.has(platform)) accounts.unshift({platform, simulation:true, display_name:'pxster-test · Simulation'});
+    if (!accounts.length) continue;
+    const card = $('provider-' + platform);
+    let chosen = accounts[0];
+    const row = document.createElement('div'); row.className = 'channel-actions';
+    const disconnect = document.createElement('button'); disconnect.type = 'button'; disconnect.className = 'text-button';
+    const status = document.createElement('span'); status.className = 'channel-disconnected'; status.textContent = 'Disconnected';
+    const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'text-button remove-account-button'; remove.textContent = 'Remove my Account';
+    const syncActions = () => {
+      const connected = chosen.simulation ? simulatedPlatforms.has(platform) : chosen.status === 'connected';
+      disconnect.textContent = 'Disconnect'; disconnect.hidden = !connected; status.hidden = true;
+    };
+    if (accounts.length > 1) {
+      const select = document.createElement('select'); select.className = 'channel-account-picker'; select.setAttribute('aria-label', names[platform] + ' account to manage');
+      accounts.forEach((account, i) => { const option = document.createElement('option'); option.value = i; option.textContent = account.display_name.replace(/^Demo /, 'Simulation '); select.append(option); });
+      select.addEventListener('change', () => { chosen = accounts[Number(select.value)]; syncActions(); });
+      card.append(select);
+    }
+    disconnect.addEventListener('click', async () => {
+      disconnect.disabled = true;
+      try { await disconnectChannel(chosen); } catch (error) { toast(error.message); disconnect.disabled = false; }
+    });
+    remove.addEventListener('click', () => openRemoval(chosen));
+    row.append(disconnect, status, remove); syncActions(); card.append(row);
+  }
   document.querySelectorAll('.channel input').forEach(el => el.addEventListener('change', updateChannels));
   updateChannels();
 }
@@ -42,8 +172,9 @@ async function refreshAccounts() { state.accounts = await api('/accounts'); rend
 let creatorRequest = 0;
 async function updateChannels() {
   const selected = selectedAccounts();
-  const youtube = selected.some(a => a.platform === 'youtube');
-  const tiktoks = selected.filter(a => a.platform === 'tiktok');
+  const youtube = selected.some(a => a.platform === 'youtube' && !a.simulation);
+  const tiktoks = selected.filter(a => a.platform === 'tiktok' && !a.simulation);
+  $('simulation-note').hidden = !selected.some(a => a.simulation);
   $('youtube-options').hidden = !youtube;
   for (const id of ['youtube-title', 'youtube-privacy', 'youtube-kids']) { $(id).required = youtube; $(id).disabled = !youtube; }
   $('tiktok-options').hidden = !tiktoks.length;
@@ -73,15 +204,16 @@ async function updateChannels() {
   } catch (error) { if (requestId !== creatorRequest) return; $('tiktok-creator').textContent = error.message + ' Reselect the TikTok account to retry.'; }
   updatePublishButton();
 }
-function updatePublishButton() { $('publish-button').disabled = state.uploading || state.sending || state.creatorLoading; }
+function updatePublishButton() { const simulated = selectedAccounts().some(a => a.simulation); $('publish-button').disabled = state.uploading || state.sending || state.creatorLoading || !selectedAccounts().length; $('media-input').disabled = !!state.config?.connection_test && !consentPreviewAccepted; $('publish-button').textContent = simulated ? 'Simulate publishing' : 'Publish post'; }
 document.addEventListener('click', async event => {
-  const button = event.target.closest('[data-connect],[data-demo],[data-disconnect],[data-retry]');
+  const button = event.target.closest('[data-connect],[data-demo],[data-disconnect],[data-remove],[data-retry]');
   if (!button) return;
   button.disabled = true;
   try {
     if (button.dataset.connect) { const result = await api(`/oauth/${button.dataset.connect}/start`, { method: 'POST' }); location.assign(result.url); }
-    if (button.dataset.demo) { await api(`/accounts/demo/${button.dataset.demo}`, { method: 'POST' }); await refreshAccounts(); toast('Demo account connected. Publishing will be simulated.'); }
-    if (button.dataset.disconnect) { await api(`/accounts/${button.dataset.disconnect}`, { method: 'DELETE' }); await refreshAccounts(); toast('Account disconnected from Pxster. Manage platform-side access in the platform’s app settings.'); }
+    if (button.dataset.demo) { await api(`/accounts/demo/${button.dataset.demo}`, { method: 'POST' }); await refreshAccounts(); toast('Simulation account connected. Publishing will be simulated.'); }
+    if (button.dataset.disconnect) await disconnectChannel(state.accounts.find(a => a.id === button.dataset.disconnect));
+    if (button.dataset.remove) openRemoval(state.accounts.find(a => a.id === button.dataset.remove));
     if (button.dataset.retry) { await api(`/destinations/${button.dataset.retry}/retry`, { method: 'POST' }); await loadHistory(); toast('Destination queued for another attempt or status check.'); }
   } catch (error) { toast(error.message); }
   finally { button.disabled = false; }
@@ -105,6 +237,14 @@ function removeMedia() {
   $('drop-zone').hidden = false;
 }
 async function upload(file) {
+  if (consentPreviewAccepted && (state.config?.connection_test || selectedAccounts().some(a => a.simulation))) {
+    if (!file || file.type !== 'video/mp4' || !file.size || file.size > 64 * 1024 * 1024) return errorBox('form-error', 'Choose a non-empty MP4 up to 64 MiB for this simulation.');
+    state.media = { simulation: true, content_type: file.type };
+    preview(file, file.type); $('media-info').hidden = false;
+    $('media-name').textContent = file.name; $('media-meta').textContent = 'Simulation · Local preview only; not uploaded or platform-validated.';
+    $('drop-zone').hidden = true; return;
+  }
+  if (state.config?.connection_test) { toast('Connect a test channel first.'); return; }
   if (!file || state.uploading) return;
   errorBox('form-error', '');
   if (!['image/jpeg', 'image/png', 'image/webp', 'video/mp4'].includes(file.type)) return errorBox('form-error', 'Choose a JPEG, PNG, WebP, or MP4 file.');
@@ -134,6 +274,25 @@ function commercialChanged() { $('commercial-options').hidden = !$('commercial')
 $('commercial').addEventListener('change', commercialChanged); $('paid-brand').addEventListener('change', commercialChanged);
 $('composer-form').addEventListener('submit', async event => {
   event.preventDefault(); errorBox('form-error', '');
+  if (selectedAccounts().some(a => a.simulation)) {
+    if (state.sending) return;
+    if (selectedAccounts().some(a => !a.simulation)) return errorBox('form-error', 'Select only the simulated channel for a test post.');
+    if (!state.media?.simulation) return errorBox('form-error', 'Choose a local test video first.');
+    if ($('caption').value.length > 2200) return errorBox('form-error', 'Use up to 2,200 characters for TikTok.');
+    if (document.querySelector('[name=timing]:checked').value !== 'now') return errorBox('form-error', 'This walkthrough supports Publish now only.');
+    const run = ++simulationRun; state.sending = true; updatePublishButton();
+    try {
+      for (const message of ['TEST · Preparing post…', 'TEST · Simulating upload…', 'TEST · Simulating processing…']) {
+        $('simulation-note').textContent = message;
+        await new Promise(resolve => setTimeout(resolve, 900));
+        if (run !== simulationRun || !consentPreviewAccepted || !state.user) return;
+      }
+      $('simulation-note').textContent = 'SIMULATED PUBLISHED · Nothing was uploaded to any platform. No live post exists.';
+    } finally { state.sending = false; updatePublishButton(); }
+    return;
+  }
+  if (state.media?.simulation) return errorBox('form-error', 'Local test media can only be used with the simulated channel.');
+  if (state.config?.connection_test) { toast('Connection test only. Publishing is disabled.'); return; }
   if (state.sending || state.uploading || state.creatorLoading) return;
   const accounts = selectedAccounts();
   try {
@@ -210,6 +369,7 @@ function setAuthMode(mode) {
   errorBox('auth-error', '');
 }
 function showAuth(mode = authMode) {
+  consentPreviewAccepted = false; simulatedPlatforms.clear(); disconnectedSimulations.clear(); simulationRun++;
   state.user = null; $('workspace').hidden = true; document.body.classList.remove('authenticated');
   setAuthMode(mode);
   if (!$('auth-dialog').open) $('auth-dialog').showModal();
@@ -241,8 +401,13 @@ async function init() {
   navigate();
   try {
     state.config = await api('/config');
-    $('connection-status').textContent = state.config.demo ? 'Demo API connected' : 'Workspace API connected';
-    $('demo-banner').hidden = !state.config.demo;
+    $('connection-status').textContent = state.config.demo ? 'Simulation API connected' : 'Workspace API connected';
+    $('demo-banner').hidden = !state.config.demo && !state.config.connection_test;
+    if (state.config.connection_test) {
+      $('demo-banner').textContent = 'Private Cloudflare test · TikTok account connection only. Uploads, publishing, and scheduling are disabled.';
+      $('publish-button').disabled = true; $('media-input').disabled = true;
+      $('auth-status').textContent = 'Private test: use your generated test access key. Public registration is disabled.';
+    }
     $('register-button').hidden = !state.config.registration;
     renderAccounts();
     if (new URLSearchParams(location.search).has('auth')) showAuth();
@@ -255,7 +420,7 @@ async function init() {
     showAuth(); $('auth-status').textContent = 'Start the Pxster API to sign in. ' + error.message;
   }
   const connection = new URLSearchParams(location.search).get('connection');
-  if (connection) { toast(({ success: 'Account connected. You’re ready to compose.', cancelled: 'Connection cancelled.', failed: 'Connection failed. Check platform permissions and try again.', no_accounts: 'No eligible Page or channel was found for this login.' })[connection] || 'Connection finished.'); history.replaceState(null, '', location.pathname + location.hash); }
+  if (connection) { toast(({ success: state.config?.connection_test ? 'TikTok connected. Publishing remains disabled for this test.' : 'Account connected. You’re ready to compose.', cancelled: 'Connection cancelled.', failed: 'Connection failed. Check platform permissions and try again.', no_accounts: 'No eligible Page or channel was found for this login.' })[connection] || 'Connection finished.'); history.replaceState(null, '', location.pathname + location.hash); }
 }
-setInterval(() => { if (state.user && location.hash === '#history' && !document.hidden) loadHistory().catch(() => {}); }, 10000);
+setInterval(() => { if (state.user && !state.config?.connection_test && location.hash === '#history' && !document.hidden) loadHistory().catch(() => {}); }, 10000);
 init();
